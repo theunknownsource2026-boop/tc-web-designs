@@ -845,7 +845,7 @@ form.addEventListener('submit',function(e){
   // 2) Nebula webhook — fires the intake pipeline
   const webhookReq=fetch('https://api.nebula.gg/webhooks/triggers/trig_069aee504357769a800078093f57bd3e/webhook',{
     method:'POST',
-    headers:{'Content-Type':'application/json'},
+    headers:{'Content-Type':'application/json','X-Webhook-Secret':'09P4cwm7tk6KnlnpSO1Q_wjFxmZrTG-l8aisUe83A70'},
     body:JSON.stringify(jsonPayload)
   });
 

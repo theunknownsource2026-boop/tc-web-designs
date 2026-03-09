@@ -1019,15 +1019,45 @@ form.addEventListener('submit',function(e){
     headers:{'Accept':'application/json'}
   });
 
-  // 2) Nebula webhook — fires the intake pipeline
-  const webhookReq=fetch('https://api.nebula.gg/webhooks/triggers/trig_069aee504357769a800078093f57bd3e/webhook',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','X-Webhook-Secret':'09P4cwm7tk6KnlnpSO1Q_wjFxmZrTG-l8aisUe83A70'},
-    body:JSON.stringify(jsonPayload)
-  });
+  // 2) Nebula webhook - fires the intake pipeline
+  //    Primary: sendBeacon (no CORS preflight, survives page unload)
+  //    Fallback: fetch with custom header + retry without header
+  const WEBHOOK_URL='https://api.nebula.gg/webhooks/triggers/trig_069aee504357769a800078093f57bd3e/webhook';
+  const webhookBody=JSON.stringify(jsonPayload);
+  let webhookReq;
+  let beaconSent=false;
+  try{
+    if(navigator.sendBeacon){
+      const blob=new Blob([webhookBody],{type:'application/json'});
+      beaconSent=navigator.sendBeacon(WEBHOOK_URL,blob);
+      console.log('[BlackHill] Webhook sendBeacon:',beaconSent?'queued':'failed');
+    }
+  }catch(err){
+    console.warn('[BlackHill] sendBeacon error:',err);
+  }
+  if(!beaconSent){
+    webhookReq=fetch(WEBHOOK_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-Webhook-Secret':'09P4cwm7tk6KnlnpSO1Q_wjFxmZrTG-l8aisUe83A70'},
+      body:webhookBody
+    }).then(r=>{
+      console.log('[BlackHill] Webhook fetch status:',r.status);
+      return r;
+    }).catch(err=>{
+      console.error('[BlackHill] Webhook fetch failed:',err);
+      return fetch(WEBHOOK_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:webhookBody
+      }).catch(e=>console.error('[BlackHill] Webhook retry failed:',e));
+    });
+  }else{
+    webhookReq=Promise.resolve('beacon');
+  }
 
   // Wait for both, show confirmation regardless
-  Promise.allSettled([emailReq,webhookReq]).then(()=>{
+  Promise.allSettled([emailReq,webhookReq]).then((results)=>{
+    console.log('[BlackHill] Submission results:',results.map(r=>r.status));
     showConfirmation();
     // Clear uploaded files on success
     uploadedR2Files = [];

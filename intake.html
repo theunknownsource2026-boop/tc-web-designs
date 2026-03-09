@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Your Custom Website | Foxworth Web Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0a;--surface:#111113;--card:#1a1a1f;--border:#2a2a30;
+  --gold:#c8a84e;--gold-light:#e8d48b;--gold-dark:#a08030;
+  --text:#e8e8e8;--text-mid:#999;--text-dim:#666;
+  --success:#34d399;--error:#f87171;
+  --radius:16px;--radius-sm:10px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;padding-bottom:80px}
+
+/* === BACKGROUND PARTICLES === */
+.particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.particle{position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;opacity:0;animation:float-up linear infinite}
+@keyframes float-up{
+  0%{opacity:0;transform:translateY(100vh) scale(0)}
+  10%{opacity:.6}
+  90%{opacity:.6}
+  100%{opacity:0;transform:translateY(-10vh) scale(1)}
+}
+
+/* === LAYOUT === */
+.container{max-width:800px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+
+/* === HERO === */
+.hero{text-align:center;padding:80px 0 40px}
+.hero-badge{display:inline-block;padding:8px 20px;border:1px solid var(--gold);border-radius:50px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:32px;background:rgba(200,168,78,.05)}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(36px,6vw,56px);font-weight:900;line-height:1.1;margin-bottom:16px}
+.hero h1 .gold{background:linear-gradient(135deg,var(--gold-light),var(--gold),var(--gold-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:17px;color:var(--text-mid);max-width:560px;margin:0 auto;font-weight:300}
+
+/* === FORM CARD === */
+.form-section{padding:20px 0 80px}
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:48px 40px;position:relative;overflow:hidden}
+.form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+
+.section-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:800;margin-bottom:6px}
+.section-sub{font-size:14px;color:var(--text-mid);margin-bottom:32px}
+
+/* === FORM STEPS === */
+.form-step{display:none;animation:fadeIn .4s ease}
+.form-step.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.step-indicator{display:flex;gap:8px;margin-bottom:36px}
+.step-dot{flex:1;height:3px;border-radius:3px;background:var(--border);transition:all .4s ease}
+.step-dot.done{background:var(--gold)}
+.step-dot.current{background:var(--gold);box-shadow:0 0 12px rgba(200,168,78,.4)}
+
+/* === FORM ELEMENTS === */
+.field{margin-bottom:24px}
+.field label{display:block;font-size:13px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text-mid);margin-bottom:8px}
+.field input,.field select,.field textarea{
+  width:100%;padding:14px 18px;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-sm);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;
+  transition:all .3s ease;outline:none
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,168,78,.1)}
+.field textarea{min-height:100px;resize:vertical}
+.field select{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+.field select option{background:var(--card);color:var(--text)}
+
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:540px){.field-row{grid-template-columns:1fr}}
+
+/* === CHECKBOXES/RADIO === */
+.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:540px){.options-grid{grid-template-columns:1fr}}
+.option-card{
+  display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;
+  transition:all .3s ease;user-select:none
+}
+.option-card:hover{border-color:var(--text-dim)}
+.option-card.selected{border-color:var(--gold);background:rgba(200,168,78,.06)}
+.option-card input{display:none}
+.option-check{
+  width:20px;height:20px;border:2px solid var(--border);border-radius:5px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s ease
+}
+.option-card.selected .option-check{border-color:var(--gold);background:var(--gold)}
+.option-check svg{opacity:0;transition:all .2s ease;width:12px;height:12px}
+.option-card.selected .option-check svg{opacity:1}
+.option-label{font-size:14px;font-weight:500}
+.option-price{margin-left:auto;font-size:12px;color:var(--gold);font-weight:600;white-space:nowrap}
+
+/* === INCLUDED FEATURE STYLING === */
+.option-card.included{border-color:rgba(52,211,153,.2);background:rgba(52,211,153,.04)}
+.option-card.included.selected{border-color:var(--success);background:rgba(52,211,153,.08)}
+.option-card.included .option-check{border-color:rgba(52,211,153,.4)}
+.option-card.included.selected .option-check{border-color:var(--success);background:var(--success)}
+.included-badge{margin-left:auto;font-size:11px;color:var(--success);font-weight:600;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
+
+/* === FEATURES SECTION HEADERS === */
+.features-section-title{font-size:13px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text-mid);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.features-section-title .section-icon{color:var(--success);font-size:15px}
+.features-section-title .section-icon-paid{color:var(--gold);font-size:15px}
+
+/* === STYLE PICKER === */
+.style-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+@media(max-width:540px){.style-grid{grid-template-columns:1fr}}
+.style-card{
+  display:flex;align-items:center;gap:14px;padding:16px;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;
+  transition:all .3s ease;user-select:none
+}
+.style-card:hover{border-color:var(--text-dim)}
+.style-card.selected{border-color:var(--gold);background:rgba(200,168,78,.06)}
+.style-card input{display:none}
+.style-check{
+  width:20px;height:20px;border:2px solid var(--border);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s ease
+}
+.style-card.selected .style-check{border-color:var(--gold);background:var(--gold)}
+.style-check svg{opacity:0;transition:all .2s ease;width:12px;height:12px}
+.style-card.selected .style-check svg{opacity:1}
+.style-info{display:flex;flex-direction:column;gap:4px}
+.style-name{font-size:14px;font-weight:600}
+.style-swatches{display:flex;gap:5px}
+.style-swatch{width:16px;height:16px;border-radius:50%;border:1px solid rgba(255,255,255,.1)}
+
+/* === BUTTONS === */
+.btn-row{display:flex;gap:12px;margin-top:32px}
+.btn{
+  padding:14px 32px;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;
+  font-size:15px;font-weight:600;cursor:pointer;transition:all .3s ease;border:none
+}
+.btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#0a0a0a;flex:1}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(200,168,78,.3)}
+.btn-secondary{background:transparent;border:1px solid var(--border);color:var(--text-mid)}
+.btn-secondary:hover{border-color:var(--text-mid)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+
+/* === CONFIRMATION === */
+.confirmation{display:none;text-align:center;padding:60px 20px}
+.confirmation.show{display:block;animation:fadeIn .6s ease}
+.confirm-icon{width:80px;height:80px;border-radius:50%;background:rgba(52,211,153,.1);border:2px solid var(--success);display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
+.confirm-icon svg{width:36px;height:36px;color:var(--success)}
+.confirm-title{font-family:'Playfair Display',serif;font-size:32px;font-weight:800;margin-bottom:12px}
+.confirm-text{font-size:16px;color:var(--text-mid);max-width:480px;margin:0 auto 8px}
+.confirm-turnaround{display:inline-block;padding:10px 24px;background:rgba(200,168,78,.08);border:1px solid rgba(200,168,78,.2);border-radius:50px;font-size:14px;color:var(--gold);margin-top:12px}
+
+/* === CHAT WIDGET === */
+.chat-toggle{
+  position:fixed;bottom:28px;right:28px;width:60px;height:60px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--gold-dark));border:none;cursor:pointer;
+  box-shadow:0 8px 32px rgba(200,168,78,.3);z-index:1000;display:flex;align-items:center;
+  justify-content:center;transition:all .3s ease
+}
+.chat-toggle:hover{transform:scale(1.08);box-shadow:0 12px 40px rgba(200,168,78,.4)}
+.chat-toggle svg{width:28px;height:28px;color:#0a0a0a;transition:transform .3s ease}
+.chat-toggle.open svg{transform:rotate(45deg)}
+
+.chat-window{
+  position:fixed;bottom:100px;right:28px;width:380px;max-height:520px;background:var(--card);
+  border:1px solid var(--border);border-radius:var(--radius);z-index:999;
+  display:flex;flex-direction:column;overflow:hidden;
+  opacity:0;transform:translateY(20px) scale(.95);pointer-events:none;
+  transition:all .3s cubic-bezier(.4,0,.2,1)
+}
+.chat-window.open{opacity:1;transform:translateY(0) scale(1);pointer-events:all}
+@media(max-width:480px){.chat-window{width:calc(100vw - 24px);right:12px;bottom:96px;max-height:60vh}}
+
+.chat-header{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.chat-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;font-weight:800;color:#0a0a0a;font-size:14px}
+.chat-header-text h4{font-size:14px;font-weight:700;margin-bottom:1px}
+.chat-header-text span{font-size:11px;color:var(--success)}
+
+.chat-messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px;min-height:280px}
+.chat-msg{max-width:85%;padding:12px 16px;border-radius:14px;font-size:13px;line-height:1.5}
+.chat-msg.bot{background:var(--surface);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px}
+.chat-msg.user{background:rgba(200,168,78,.15);border:1px solid rgba(200,168,78,.2);align-self:flex-end;border-bottom-right-radius:4px}
+.typing-indicator{display:flex;gap:4px;padding:12px 16px;align-self:flex-start}
+.typing-indicator span{width:6px;height:6px;background:var(--text-dim);border-radius:50%;animation:typing .8s infinite ease-in-out}
+.typing-indicator span:nth-child(2){animation-delay:.15s}
+.typing-indicator span:nth-child(3){animation-delay:.3s}
+@keyframes typing{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+
+.chat-input-row{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px}
+.chat-input{
+  flex:1;padding:10px 14px;background:var(--surface);border:1px solid var(--border);
+  border-radius:20px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;outline:none
+}
+.chat-input:focus{border-color:var(--gold)}
+.chat-send{width:36px;height:36px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.chat-send svg{width:16px;height:16px;color:#0a0a0a}
+
+/* === FOOTER === */
+.footer{text-align:center;padding:40px 0;border-top:1px solid var(--border);margin-top:0}
+.footer p{font-size:12px;color:var(--text-dim)}
+
+/* === STICKY PRICE BAR === */
+.price-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  padding: 16px 24px;
+  background: rgba(15,15,20,0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(168,132,80,0.3);
+  transition: background 0.5s, border-color 0.5s, color 0.5s;
+}
+.price-bar-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.price-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+.price-breakdown {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  flex: 1;
+  text-align: center;
+}
+.price-total {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--gold);
+  transition: color 0.5s;
+}
+</style>
+</head>
+<body>
+
+<!-- Particles -->
+<div class="particles" id="particles"></div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">Handcrafted Web Design</div>
+    <h1>Let's Build Your <span class="gold">Dream Website</span></h1>
+    <p>Tell us about your vision and we'll craft a custom website that makes your brand stand out. Most sites delivered in as little as <strong style="color:var(--gold)">48-72 hours</strong>.</p>
+  </div>
+</section>
+
+<!-- Form Section -->
+<section class="form-section">
+  <div class="container">
+    <div class="form-card">
+
+      <!-- Step Indicators -->
+      <div class="step-indicator">
+        <div class="step-dot current" data-step="1"></div>
+        <div class="step-dot" data-step="2"></div>
+        <div class="step-dot" data-step="3"></div>
+        <div class="step-dot" data-step="4"></div>
+      </div>
+
+      <form id="intakeForm" action="https://formsubmit.co/r0ckstart2603@gmail.com" method="POST">
+        <!-- Formsubmit config -->
+        <input type="hidden" name="_subject" value="New Web Design Inquiry!">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_next" id="redirectUrl">
+        <input type="hidden" name="Estimated Price Range" id="hiddenEstimate">
+        <input type="hidden" name="Design Style" id="hiddenStyle" value="">
+        <input type="hidden" name="_autoresponse" value="Thank you for reaching out! We received your web design inquiry and our team is already reviewing your project details. You'll hear from us within 24 hours with a custom quote and next steps. We're excited to bring your vision to life!">
+
+        <!-- STEP 1: About You -->
+        <div class="form-step active" data-step="1">
+          <div class="section-title">About You</div>
+          <div class="section-sub">First, let's get to know you and your business.</div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>Your Name *</label>
+              <input type="text" name="Name" required placeholder="Full name">
+            </div>
+            <div class="field">
+              <label>Business Name *</label>
+              <input type="text" name="Business Name" required placeholder="Your business or brand name">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Email Address *</label>
+              <input type="email" name="Email" required placeholder="you@email.com">
+            </div>
+            <div class="field">
+              <label>Phone Number</label>
+              <input type="tel" name="Phone" placeholder="(555) 123-4567">
+            </div>
+          </div>
+          <div class="field">
+            <label>What does your business do? *</label>
+            <textarea name="Business Description" required placeholder="Tell us briefly what your business is about, who your customers are, and what makes you unique..."></textarea>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="goToStep(2)">Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 2: Website Type (no prices shown) -->
+        <div class="form-step" data-step="2">
+          <div class="section-title">What Type of Website?</div>
+          <div class="section-sub">Pick the style that fits your business best.</div>
+
+          <div class="options-grid" id="siteTypeGrid">
+            <div class="option-card" data-price="500">
+              <input type="radio" name="Website Type" value="Landing Page" required>
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Landing Page</div>
+            </div>
+            <div class="option-card" data-price="800">
+              <input type="radio" name="Website Type" value="Business Website">
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Business Website</div>
+            </div>
+            <div class="option-card" data-price="600">
+              <input type="radio" name="Website Type" value="Portfolio / Personal">
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Portfolio / Personal</div>
+            </div>
+            <div class="option-card" data-price="800">
+              <input type="radio" name="Website Type" value="Restaurant / Food">
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Restaurant / Food</div>
+            </div>
+            <div class="option-card" data-price="800">
+              <input type="radio" name="Website Type" value="Barbershop / Salon">
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Barbershop / Salon</div>
+            </div>
+            <div class="option-card" data-price="800">
+              <input type="radio" name="Website Type" value="Fitness / Training">
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Fitness / Training</div>
+            </div>
+            <div class="option-card" data-price="1200">
+              <input type="radio" name="Website Type" value="E-Commerce / Online Store">
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Online Store</div>
+            </div>
+            <div class="option-card" data-price="700">
+              <input type="radio" name="Website Type" value="Other">
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Other</div>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-secondary" onclick="goToStep(1)">Back</button>
+            <button type="button" class="btn btn-primary" onclick="goToStep(3)">Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Features & Style -->
+        <div class="form-step" data-step="3">
+          <div class="section-title">Features & Design</div>
+          <div class="section-sub">Choose your features and pick a design style for your site.</div>
+
+          <!-- FREE: Included With Every Site -->
+          <div class="features-section-title"><span class="section-icon">&#10003;</span> Included With Every Site</div>
+          <div class="options-grid" id="includedGrid">
+            <div class="option-card included selected" data-price="0">
+              <input type="checkbox" name="Features" value="Contact Form" checked>
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Contact Form</div>
+              <div class="included-badge">Included</div>
+            </div>
+            <div class="option-card included selected" data-price="0">
+              <input type="checkbox" name="Features" value="Social Media Links" checked>
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Social Media Links</div>
+              <div class="included-badge">Included</div>
+            </div>
+            <div class="option-card included selected" data-price="0">
+              <input type="checkbox" name="Features" value="Contact Info / Map" checked>
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Contact Info / Map</div>
+              <div class="included-badge">Included</div>
+            </div>
+            <div class="option-card included selected" data-price="0">
+              <input type="checkbox" name="Features" value="Mobile Responsive Design" checked>
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Mobile Responsive Design</div>
+              <div class="included-badge">Included</div>
+            </div>
+          </div>
+
+          <!-- PAID: Premium Add-Ons -->
+          <div class="features-section-title" style="margin-top:28px"><span class="section-icon-paid">&#9733;</span> Premium Add-Ons</div>
+          <div class="options-grid" id="featuresGrid">
+            <div class="option-card" data-price="300">
+              <input type="checkbox" name="Features" value="Online Booking">
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Online Booking</div>
+              <div class="option-price">+$300</div>
+            </div>
+            <div class="option-card" data-price="200">
+              <input type="checkbox" name="Features" value="Photo Gallery">
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Photo Gallery</div>
+              <div class="option-price">+$200</div>
+            </div>
+            <div class="option-card" data-price="250">
+              <input type="checkbox" name="Features" value="Menu / Services List">
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Menu / Price List</div>
+              <div class="option-price">+$250</div>
+            </div>
+            <div class="option-card" data-price="350">
+              <input type="checkbox" name="Features" value="Testimonials / Reviews">
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Testimonials / Reviews</div>
+              <div class="option-price">+$350</div>
+            </div>
+            <div class="option-card" data-price="400">
+              <input type="checkbox" name="Features" value="Blog / News Section">
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Blog / News</div>
+              <div class="option-price">+$400</div>
+            </div>
+            <div class="option-card" data-price="300">
+              <input type="checkbox" name="Features" value="Live Chat Widget">
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Live Chat</div>
+              <div class="option-price">+$300</div>
+            </div>
+            <div class="option-card" data-price="500">
+              <input type="checkbox" name="Features" value="E-Commerce / Shop">
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">E-Commerce / Shop</div>
+              <div class="option-price">+$500</div>
+            </div>
+            <div class="option-card" data-price="200">
+              <input type="checkbox" name="Features" value="Custom Animations">
+              <div class="option-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+              <div class="option-label">Custom Animations</div>
+              <div class="option-price">+$200</div>
+            </div>
+          </div>
+
+          <!-- Pick Your Style (replaces color dropdown + estimate card) -->
+          <div style="margin-top:28px">
+            <div class="features-section-title"><span class="section-icon-paid">&#9830;</span> Pick Your Style</div>
+            <div class="style-grid" id="styleGrid">
+              <div class="style-card" data-style="Dark & Bold">
+                <input type="radio" name="styleChoice" value="Dark & Bold (black, gold, deep tones)">
+                <div class="style-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+                <div class="style-info">
+                  <div class="style-name">Dark & Bold</div>
+                  <div class="style-swatches">
+                    <div class="style-swatch" style="background:#0a0a0a"></div>
+                    <div class="style-swatch" style="background:#c8a84e"></div>
+                    <div class="style-swatch" style="background:#1a1a2e"></div>
+                    <div class="style-swatch" style="background:#e8d48b"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="style-card" data-style="Clean & Modern">
+                <input type="radio" name="styleChoice" value="Clean & Modern (white, minimal, light)">
+                <div class="style-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+                <div class="style-info">
+                  <div class="style-name">Clean & Modern</div>
+                  <div class="style-swatches">
+                    <div class="style-swatch" style="background:#ffffff"></div>
+                    <div class="style-swatch" style="background:#f5f5f5"></div>
+                    <div class="style-swatch" style="background:#333333"></div>
+                    <div class="style-swatch" style="background:#0066ff"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="style-card" data-style="Warm & Earthy">
+                <input type="radio" name="styleChoice" value="Warm & Earthy (browns, creams, natural)">
+                <div class="style-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+                <div class="style-info">
+                  <div class="style-name">Warm & Earthy</div>
+                  <div class="style-swatches">
+                    <div class="style-swatch" style="background:#8B6F47"></div>
+                    <div class="style-swatch" style="background:#D4A574"></div>
+                    <div class="style-swatch" style="background:#F5F0E8"></div>
+                    <div class="style-swatch" style="background:#5C4033"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="style-card" data-style="Vibrant & Energetic">
+                <input type="radio" name="styleChoice" value="Vibrant & Energetic (bright, colorful, fun)">
+                <div class="style-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+                <div class="style-info">
+                  <div class="style-name">Vibrant & Energetic</div>
+                  <div class="style-swatches">
+                    <div class="style-swatch" style="background:#FF6B6B"></div>
+                    <div class="style-swatch" style="background:#4ECDC4"></div>
+                    <div class="style-swatch" style="background:#FFE66D"></div>
+                    <div class="style-swatch" style="background:#A855F7"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="style-card" data-style="Professional & Corporate">
+                <input type="radio" name="styleChoice" value="Professional & Corporate (navy, grey, clean)">
+                <div class="style-check"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></div>
+                <div class="style-info">
+                  <div class="style-name">Professional & Corporate</div>
+                  <div class="style-swatches">
+                    <div class="style-swatch" style="background:#1B2A4A"></div>
+                    <div class="style-swatch" style="background:#4A5568"></div>
+                    <div class="style-swatch" style="background:#E2E8F0"></div>
+                    <div class="style-swatch" style="background:#2B6CB0"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-secondary" onclick="goToStep(2)">Back</button>
+            <button type="button" class="btn btn-primary" onclick="goToStep(4)">Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: Timeline & Submit -->
+        <div class="form-step" data-step="4">
+          <div class="section-title">Timeline & Final Details</div>
+          <div class="section-sub">Almost done -- just a couple more details.</div>
+
+          <div class="field">
+            <label>When do you need it? *</label>
+            <select name="Timeline" required>
+              <option value="" disabled selected>Select a timeline...</option>
+              <option value="ASAP (Rush - 48-72 hours)" data-rush="200">ASAP / Rush (48-72 hours) (+$200 rush fee)</option>
+              <option value="Within 1 week" data-rush="0">Within 1 week</option>
+              <option value="Within 2 weeks" data-rush="0">Within 2 weeks</option>
+              <option value="Within a month" data-rush="0">Within a month</option>
+              <option value="No rush - whenever it's ready" data-rush="0">No rush -- whenever it's ready</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Do you have your content ready? (text, photos, logo)</label>
+            <select name="Content Ready">
+              <option value="" disabled selected>Select...</option>
+              <option value="Yes, everything is ready">Yes, everything is ready to go</option>
+              <option value="Some of it - need help with the rest">Some of it -- need help with the rest</option>
+              <option value="Not yet - I need guidance">Not yet -- I need guidance</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Do you have a domain name? (e.g. yourbusiness.com)</label>
+            <select name="Has Domain">
+              <option value="" disabled selected>Select...</option>
+              <option value="Yes, I already have one">Yes, I already have one</option>
+              <option value="No, I need help getting one">No, I need help getting one</option>
+              <option value="Not sure what this means">Not sure what this means</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Any websites you like? (for inspiration)</label>
+            <input type="url" name="Inspiration URL" placeholder="https://example.com">
+          </div>
+
+          <div class="field">
+            <label>Anything else we should know?</label>
+            <textarea name="Additional Notes" placeholder="Special requests, specific pages you need, branding requirements, or anything else..."></textarea>
+          </div>
+
+          <div class="field">
+            <label>How did you hear about us?</label>
+            <select name="Referral Source">
+              <option value="" disabled selected>Select...</option>
+              <option value="Instagram">Instagram</option>
+              <option value="Facebook">Facebook</option>
+              <option value="TikTok">TikTok</option>
+              <option value="Google Search">Google Search</option>
+              <option value="Word of Mouth">Word of Mouth / Referral</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-secondary" onclick="goToStep(3)">Back</button>
+            <button type="submit" class="btn btn-primary" id="submitBtn">Submit My Project</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Confirmation -->
+      <div class="confirmation" id="confirmation">
+        <div class="confirm-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <div class="confirm-title">We Got Your Vision!</div>
+        <div class="confirm-text">Our design team is already reviewing your project. Keep an eye on your email and phone -- we'll follow up within <strong>24 hours</strong> with a custom quote and next steps.</div>
+        <div class="confirm-turnaround">Most projects delivered in 48 hours - 2 weeks</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="container">
+    <p>&copy; 2026 Foxworth Web Design. All rights reserved. Handcrafted with care.</p>
+  </div>
+</div>
+
+
+<!-- Sticky Price Estimator Bar -->
+<div class="price-bar" id="priceBar">
+  <div class="price-bar-inner">
+    <div class="price-label">Estimated Investment</div>
+    <div class="price-breakdown" id="priceBreakdown">Select a site type to begin</div>
+    <div class="price-total">$<span id="priceTotal">0</span></div>
+  </div>
+</div>
+
+<!-- Chat Widget -->
+<button class="chat-toggle" id="chatToggle" aria-label="Chat with us">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+</button>
+
+<div class="chat-window" id="chatWindow">
+  <div class="chat-header">
+    <div class="chat-avatar">FW</div>
+    <div class="chat-header-text">
+      <h4>Foxworth Design Team</h4>
+      <span>Online now</span>
+    </div>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-msg bot">Hey! Welcome to Foxworth Web Design. I'm here to help if you have any questions about the form or our web design services. What can I help with?</div>
+  </div>
+  <div class="chat-input-row">
+    <input class="chat-input" id="chatInput" type="text" placeholder="Type a question..." autocomplete="off">
+    <button class="chat-send" id="chatSend" aria-label="Send">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+// === PARTICLES ===
+(function(){
+  const c=document.getElementById('particles');
+  for(let i=0;i<30;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDuration=(8+Math.random()*12)+'s';
+    p.style.animationDelay=Math.random()*10+'s';
+    c.appendChild(p);
+  }
+})();
+
+// === PRICING ENGINE ===
+let basePrice=0, featuresTotal=0, rushFee=0;
+
+function recalculate(){
+  const total = basePrice + featuresTotal + rushFee;
+  document.getElementById('priceTotal').textContent = total;
+
+  if(basePrice === 0){
+    document.getElementById('priceBreakdown').textContent = 'Select a site type to begin';
+  } else {
+    let parts = [];
+    parts.push('Base: $' + basePrice);
+    if(featuresTotal > 0) parts.push('Add-ons: $' + featuresTotal);
+    if(rushFee > 0) parts.push('Rush: $' + rushFee);
+    document.getElementById('priceBreakdown').textContent = parts.join(' + ');
+  }
+
+  document.getElementById('hiddenEstimate').value = 'Base: $' + basePrice + ' | Add-ons: $' + featuresTotal + ' | Rush: $' + rushFee + ' | Total: $' + total;
+}
+
+// Site type selection (radio-style, div click with preventDefault)
+document.querySelectorAll('#siteTypeGrid .option-card').forEach(card=>{
+  card.addEventListener('click',function(e){
+    e.preventDefault();
+    document.querySelectorAll('#siteTypeGrid .option-card').forEach(c=>{
+      c.classList.remove('selected');
+      const r=c.querySelector('input[type=radio]');
+      if(r) r.checked=false;
+    });
+    this.classList.add('selected');
+    const radio=this.querySelector('input[type=radio]');
+    if(radio) radio.checked=true;
+    basePrice=parseInt(this.dataset.price)||0;
+    recalculate();
+  });
+});
+
+// Included features (free, toggleable but on by default)
+document.querySelectorAll('#includedGrid .option-card').forEach(card=>{
+  card.addEventListener('click',function(e){
+    e.preventDefault();
+    this.classList.toggle('selected');
+    const cb=this.querySelector('input[type=checkbox]');
+    cb.checked=this.classList.contains('selected');
+  });
+});
+
+// Paid features checkboxes
+document.querySelectorAll('#featuresGrid .option-card').forEach(card=>{
+  card.addEventListener('click',function(e){
+    e.preventDefault();
+    this.classList.toggle('selected');
+    const cb=this.querySelector('input[type=checkbox]');
+    cb.checked=this.classList.contains('selected');
+    featuresTotal=0;
+    document.querySelectorAll('#featuresGrid .option-card.selected').forEach(s=>{
+      featuresTotal+=parseInt(s.dataset.price)||0;
+    });
+    recalculate();
+  });
+});
+
+// Style picker (radio-style selection)
+document.querySelectorAll('#styleGrid .style-card').forEach(card=>{
+  card.addEventListener('click',function(e){
+    e.preventDefault();
+    document.querySelectorAll('#styleGrid .style-card').forEach(c=>{
+      c.classList.remove('selected');
+      const r=c.querySelector('input[type=radio]');
+      if(r) r.checked=false;
+    });
+    this.classList.add('selected');
+    const radio=this.querySelector('input[type=radio]');
+    if(radio){
+      radio.checked=true;
+      document.getElementById('hiddenStyle').value=radio.value;
+    }
+
+    // Theme mappings for the price bar
+    const themes = {
+      'Dark & Bold': { bg: 'rgba(15,15,20,0.95)', border: 'rgba(168,132,80,0.4)', accent: '#a88450', text: '#f5f0e8' },
+      'Clean & Modern': { bg: 'rgba(240,245,250,0.95)', border: 'rgba(59,130,246,0.3)', accent: '#3b82f6', text: '#1e293b' },
+      'Warm & Earthy': { bg: 'rgba(45,30,20,0.95)', border: 'rgba(194,139,79,0.4)', accent: '#c28b4f', text: '#f5e6d3' },
+      'Vibrant & Energetic': { bg: 'rgba(25,10,40,0.95)', border: 'rgba(168,85,247,0.4)', accent: '#a855f7', text: '#f0e6ff' },
+      'Professional & Corporate': { bg: 'rgba(15,23,42,0.95)', border: 'rgba(100,116,139,0.3)', accent: '#64748b', text: '#e2e8f0' }
+    };
+
+    const selectedStyle = this.dataset.style;
+    const theme = themes[selectedStyle];
+    if(theme) {
+      const bar = document.getElementById('priceBar');
+      bar.style.background = theme.bg;
+      bar.style.borderTopColor = theme.border;
+      bar.style.color = theme.text;
+      document.getElementById('priceTotal').style.color = theme.accent;
+    }
+
+    recalculate();
+  });
+});
+
+// Rush fee
+document.querySelector('select[name="Timeline"]').addEventListener('change',function(){
+  const opt=this.options[this.selectedIndex];
+  rushFee=parseInt(opt.dataset.rush)||0;
+  recalculate();
+});
+
+// === STEP NAVIGATION ===
+function goToStep(n){
+  // Validate current step before advancing
+  const current=document.querySelector('.form-step.active');
+  const currentStep=parseInt(current.dataset.step);
+
+  if(n>currentStep){
+    const required=current.querySelectorAll('[required]');
+    let valid=true;
+    required.forEach(f=>{
+      if(!f.value && f.type!=='radio'){
+        f.style.borderColor='var(--error)';
+        valid=false;
+        setTimeout(()=>f.style.borderColor='',2000);
+      }
+    });
+    // Check radio buttons
+    if(currentStep===2){
+      const typeSelected=document.querySelector('input[name="Website Type"]:checked');
+      if(!typeSelected){
+        document.querySelectorAll('#siteTypeGrid .option-card').forEach(c=>{
+          c.style.borderColor='var(--error)';
+          setTimeout(()=>c.style.borderColor='',2000);
+        });
+        valid=false;
+      }
+    }
+    if(!valid) return;
+  }
+
+  document.querySelectorAll('.form-step').forEach(s=>s.classList.remove('active'));
+  document.querySelector(`.form-step[data-step="${n}"]`).classList.add('active');
+
+  document.querySelectorAll('.step-dot').forEach(d=>{
+    const ds=parseInt(d.dataset.step);
+    d.className='step-dot';
+    if(ds<n) d.classList.add('done');
+    if(ds===n) d.classList.add('current');
+  });
+
+  window.scrollTo({top:document.querySelector('.form-card').offsetTop-100,behavior:'smooth'});
+}
+
+// === FORM SUBMISSION ===
+const form=document.getElementById('intakeForm');
+form.addEventListener('submit',function(e){
+  e.preventDefault();
+
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true;
+  btn.textContent='Sending...';
+
+  // Final recalculate to capture values
+  recalculate();
+
+  const formData=new FormData(form);
+
+  fetch(form.action,{
+    method:'POST',
+    body:formData,
+    headers:{'Accept':'application/json'}
+  }).then(r=>{
+    showConfirmation();
+  }).catch(err=>{
+    showConfirmation();
+  });
+});
+
+function showConfirmation(){
+  document.querySelectorAll('.form-step').forEach(s=>s.classList.remove('active'));
+  document.querySelector('.step-indicator').style.display='none';
+
+  const conf=document.getElementById('confirmation');
+  conf.classList.add('show');
+
+  // Reset after 8 seconds for next submission
+  setTimeout(()=>{
+    conf.classList.remove('show');
+    form.reset();
+    // Reset paid features
+    document.querySelectorAll('#featuresGrid .option-card').forEach(c=>c.classList.remove('selected'));
+    // Reset site type
+    document.querySelectorAll('#siteTypeGrid .option-card').forEach(c=>c.classList.remove('selected'));
+    // Reset style cards
+    document.querySelectorAll('#styleGrid .style-card').forEach(c=>c.classList.remove('selected'));
+    // Re-select included features
+    document.querySelectorAll('#includedGrid .option-card').forEach(c=>{
+      c.classList.add('selected');
+      const cb=c.querySelector('input[type=checkbox]');
+      if(cb) cb.checked=true;
+    });
+    featuresTotal=0;rushFee=0;basePrice=0;
+    recalculate();
+    // Reset price bar theme
+    const bar=document.getElementById('priceBar');
+    bar.style.background='';bar.style.borderTopColor='';bar.style.color='';
+    document.getElementById('priceTotal').style.color='';
+    document.getElementById('hiddenStyle').value='';
+    document.querySelector('.step-indicator').style.display='flex';
+    goToStep(1);
+    document.getElementById('submitBtn').disabled=false;
+    document.getElementById('submitBtn').textContent='Submit My Project';
+  },8000);
+}
+
+// === AI CHAT WIDGET ===
+const chatToggle=document.getElementById('chatToggle');
+const chatWindow=document.getElementById('chatWindow');
+const chatMessages=document.getElementById('chatMessages');
+const chatInput=document.getElementById('chatInput');
+const chatSend=document.getElementById('chatSend');
+
+chatToggle.addEventListener('click',()=>{
+  chatWindow.classList.toggle('open');
+  chatToggle.classList.toggle('open');
+  if(chatWindow.classList.contains('open')) chatInput.focus();
+});
+
+chatSend.addEventListener('click',sendChat);
+chatInput.addEventListener('keydown',e=>{if(e.key==='Enter')sendChat()});
+
+function sendChat(){
+  const msg=chatInput.value.trim();
+  if(!msg)return;
+
+  addMsg(msg,'user');
+  chatInput.value='';
+
+  // Show typing
+  const typing=document.createElement('div');
+  typing.className='typing-indicator';
+  typing.innerHTML='<span></span><span></span><span></span>';
+  chatMessages.appendChild(typing);
+  chatMessages.scrollTop=chatMessages.scrollHeight;
+
+  setTimeout(()=>{
+    typing.remove();
+    const response=getResponse(msg);
+    addMsg(response,'bot');
+  },800+Math.random()*1200);
+}
+
+function addMsg(text,type){
+  const div=document.createElement('div');
+  div.className=`chat-msg ${type}`;
+  div.textContent=text;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop=chatMessages.scrollHeight;
+}
+
+function getResponse(msg){
+  const m=msg.toLowerCase();
+
+  // PRICING -- direct to custom quote
+  if(m.includes('price')||m.includes('cost')||m.includes('how much')||m.includes('expensive')||m.includes('cheap')||m.includes('afford')||m.includes('budget')||m.includes('discount')||m.includes('deal')||m.includes('money')||m.includes('pay')||m.includes('charge')||m.includes('rate')||m.includes('fee')){
+    const priceResponses=[
+      "Our pricing is based on your project needs. Fill out the form and our team will send you a custom quote within 24 hours. Every project is unique, so we tailor each quote to exactly what you need.",
+      "Great question! We quote each project individually based on the type of site and features you choose. Complete the form above and we'll get back to you with a personalized quote within 24 hours.",
+      "Every project is different, so we provide custom quotes rather than one-size-fits-all pricing. Fill out the form with your details and our team will follow up with an accurate quote tailored to your needs."
+    ];
+    return priceResponses[Math.floor(Math.random()*priceResponses.length)];
+  }
+
+  // BUSINESS INFO
+  if(m.includes('who')||m.includes('team')||m.includes('company')||m.includes('owner')||m.includes('about you')||m.includes('your business')){
+    return "We're a boutique web design studio focused on building custom, handcrafted websites for small businesses. Our team specializes in fast turnaround without sacrificing quality. Fill out the form to get started!";
+  }
+
+  // HOW LONG / TIMELINE
+  if(m.includes('how long')||m.includes('turnaround')||m.includes('delivery')||m.includes('when')||m.includes('fast')||m.includes('quick')||m.includes('rush')||m.includes('timeline')){
+    return "Most of our projects are delivered within 1-2 weeks, but we do offer rush delivery in as little as 48-72 hours for urgent needs. You can select your preferred timeline in the form!";
+  }
+
+  // WHAT'S INCLUDED
+  if(m.includes('include')||m.includes('what do i get')||m.includes('come with')||m.includes('package')){
+    return "Every website we build is fully custom -- mobile-responsive design, fast loading, SEO-friendly, and built to match your brand. The form lets you add specific features like booking, galleries, online stores, and more. Fill it out and we'll put together exactly what you need.";
+  }
+
+  // HELP WITH FORM
+  if(m.includes('form')||m.includes('fill')||m.includes('confused')||m.includes('help')||m.includes('stuck')||m.includes("don't understand")||m.includes('what does')){
+    return "Happy to help! The form has 4 quick steps: your info, the type of website you want, features you'd like, and timeline details. Just go through each step and pick what fits. If any question is unclear, ask me about it specifically!";
+  }
+
+  // DOMAIN
+  if(m.includes('domain')||m.includes('.com')||m.includes('url')||m.includes('website name')||m.includes('hosting')){
+    return "A domain is your website address (like yourbusiness.com). If you don't have one yet, no worries -- we can help you get set up with one. Just note it in the form and we'll handle it.";
+  }
+
+  // CONTENT / PHOTOS
+  if(m.includes('content')||m.includes('photo')||m.includes('image')||m.includes('logo')||m.includes('text')||m.includes('copy')){
+    return "If you have your content ready (photos, logo, text), great -- it speeds things up. If not, we can work with you on it. Just select your content status in the form and we'll figure it out together.";
+  }
+
+  // ECOMMERCE
+  if(m.includes('store')||m.includes('shop')||m.includes('sell')||m.includes('ecommerce')||m.includes('product')||m.includes('payment')){
+    return "We build online stores where your customers can browse products and checkout securely. Select 'Online Store' in the website type step and we'll build it out for you. Let us know more in the form!";
+  }
+
+  // GREETING
+  if(m.includes('hi')||m.includes('hello')||m.includes('hey')||m.includes('sup')||m.includes('yo')||m.match(/^(what'?s? up|whats good|good morning|good evening)$/i)){
+    return "Hey! Good to have you here. Looking to get a website built? Just fill out the form above and our team will take care of the rest. Need help with anything specific?";
+  }
+
+  // THANK YOU
+  if(m.includes('thank')||m.includes('thanks')||m.includes('appreciate')){
+    return "You're welcome! If you have any other questions, I'm right here. Otherwise, go ahead and fill out the form -- our team will be in touch soon!";
+  }
+
+  // DEFAULT
+  const defaults=[
+    "That's a great question! For the most accurate answer, fill out the form above and our team will follow up personally within 24 hours to discuss everything in detail.",
+    "I'd love to help with that! The quickest way to get a tailored response is to submit the form -- our design team reviews every project individually and will reach out to you directly.",
+    "Good question! Our team handles each project personally. Fill out the form with your details and they'll get back to you within 24 hours with everything you need to know."
+  ];
+  return defaults[Math.floor(Math.random()*defaults.length)];
+}
+</script>
+</body>
+</html>
